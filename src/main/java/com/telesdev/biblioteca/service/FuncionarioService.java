@@ -60,10 +60,10 @@ public class FuncionarioService {
 		}
 	}
 
-	public void atualizar(Funcionario funcionario) {
+	public Funcionario atualizar(Funcionario funcionario) {
 		Funcionario funcionarioReturn = verificaSeExisteFuncionario(funcionario.getId());
 		atualizarDados(funcionarioReturn, funcionario);
-		salvar(funcionarioReturn, true);
+		return salvar(funcionarioReturn, true);
 	}
 	
 	private void atualizarDados(Funcionario funcionarioReturn, Funcionario funcionario) {

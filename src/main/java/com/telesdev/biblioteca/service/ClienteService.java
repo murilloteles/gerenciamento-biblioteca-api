@@ -53,10 +53,10 @@ public class ClienteService {
 		
 	}
 	
-	public void atualizar(Cliente cliente) {
+	public Cliente atualizar(Cliente cliente) {
 		Cliente clienteReturn = verificaSeExisteCliente(cliente.getId());
 		atualizarDados(clienteReturn, cliente);
-		salvar(clienteReturn, true);
+		return salvar(clienteReturn, true);
 	}
 	
 	private void atualizarDados(Cliente clienteReturn, Cliente cliente) {

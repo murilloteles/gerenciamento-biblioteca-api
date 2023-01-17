@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,15 @@ import com.telesdev.biblioteca.repository.EnderecoRepository;
 public class EnderecoService {
 	@Autowired
 	EnderecoRepository enderecoRepository;
+	
+	public Page<Endereco> listar(int pagina, int tamanho) {
+		 PageRequest pageRequest = PageRequest.of(
+				 	 pagina,
+				 	 tamanho,
+	                 Sort.Direction.ASC,
+	                 "cep");
+       return enderecoRepository.listarEnderecos(pageRequest);
+	}
 
 	public Endereco buscar(Long id) {
 		Optional<Endereco> optionalEndereco = enderecoRepository.findById(id);
@@ -30,11 +42,21 @@ public class EnderecoService {
 
 	}
 	
+	public Endereco buscar(String cep) {
+		String cepFormatado = formataCep(cep);
+		Optional<Endereco> optionalEndereco = enderecoRepository.findByCep(cepFormatado);
+
+		if (!optionalEndereco.isPresent())
+			throw new EnderecoNaoEncontradoException("O Endereco com CEP " + cep + " não foi encontrado");
+
+		return optionalEndereco.get();
+	}
+
 	public Endereco buscarCepMaiorIncidenciaFuncionario() {
 		Endereco retorno = null;
 		List<String> listGroupByCepFuncionarios = enderecoRepository.findGroupByCepFuncionarios();
 		if(listGroupByCepFuncionarios != null) {
-			retorno = buscar(listGroupByCepFuncionarios.get(0));
+			retorno = buscarViaCep(listGroupByCepFuncionarios.get(0));
 		}else {
 			retorno = new Endereco();
 		}
@@ -60,7 +82,7 @@ public class EnderecoService {
 		return endereco;
 	}
 	
-	private Endereco buscar(String cep) {
+	private Endereco buscarViaCep(String cep) {
 		RestTemplate restTemplate = new RestTemplate();
 		String uriViaCep = "https://viacep.com.br/ws/"+ cep + "/json"; 
 
@@ -97,6 +119,20 @@ public class EnderecoService {
 			return;
 		
 		throw new CampoInvalidoException("Campo Endereco inválido.");
+	}
+	
+	private String formataCep(String cep) {
+		if(cep.matches("[0-9]{8}")){
+			StringBuilder cepFormatado = new StringBuilder();
+			cepFormatado.append(cep.substring(0,5));
+			cepFormatado.append("-");
+			cepFormatado.append(cep.substring(5));
+			return cepFormatado.toString();
+		}else if(cep.matches("[0-9]{5}-[0-9]{3}")) {
+			return cep;
+		}else {
+			throw new CampoInvalidoException("Cep com formato inválido. Formatos aceitos: 00000000 ou 00000-000");
+		}
 	}
 
 }
