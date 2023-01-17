@@ -1,10 +1,12 @@
 package com.telesdev.biblioteca.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.telesdev.biblioteca.domain.Endereco;
@@ -22,8 +24,13 @@ public class FuncionarioService {
 	@Autowired
 	EnderecoService enderecoService;
 
-	public List<Funcionario> listar() {
-		return funcionarioRepository.findAll();
+	public Page<Funcionario> listar(int pagina, int tamanho) {
+		 PageRequest pageRequest = PageRequest.of(
+			 	 pagina,
+			 	 tamanho,
+                 Sort.Direction.ASC,
+                 "pessoa.nome");
+		 return funcionarioRepository.listarFuncionarios(pageRequest);
 	}
 
 	public Funcionario salvar(Funcionario funcionario, boolean isUpdate) {
@@ -64,8 +71,8 @@ public class FuncionarioService {
 		funcionarioReturn.setNascimento(funcionario.getNascimento());
 		funcionarioReturn.setNacionalidade(funcionario.getNacionalidade());
 		funcionarioReturn.setDocumento(funcionario.getDocumento());
-		funcionarioReturn.setDataContratacao(funcionario.getDataContratacao());
 		funcionarioReturn.setEndereco(funcionario.getEndereco());
+		funcionarioReturn.setDataContratacao(funcionario.getDataContratacao());
 	}
 
 	private Funcionario verificaSeExisteFuncionario(Long id) {

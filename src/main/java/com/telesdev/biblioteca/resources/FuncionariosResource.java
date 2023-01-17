@@ -1,11 +1,11 @@
 package com.telesdev.biblioteca.resources;
 
 import java.net.URI;
-import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -32,8 +33,15 @@ public class FuncionariosResource{
 	FuncionarioService funcionarioService;
 	
 	@GetMapping
-	public ResponseEntity<List<Funcionario>> listar() {
-		return ResponseEntity.status(HttpStatus.OK).body(funcionarioService.listar());
+	public ResponseEntity<Page<Funcionario>> listar(@RequestParam(
+												            value = "pagina",
+												            required = false,
+												            defaultValue = "0") int pagina,
+												    @RequestParam(
+												            value = "tamanho",
+												            required = false,
+												            defaultValue = "10") int tamanho) {
+		return ResponseEntity.status(HttpStatus.OK).body(funcionarioService.listar(pagina,tamanho));
 	}
 	
 	
