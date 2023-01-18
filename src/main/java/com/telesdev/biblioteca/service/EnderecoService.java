@@ -54,9 +54,10 @@ public class EnderecoService {
 
 	public Endereco buscarCepMaiorIncidenciaFuncionario() {
 		Endereco retorno = null;
-		List<String> listGroupByCepFuncionarios = enderecoRepository.findGroupByCepFuncionarios();
+		List<Object[]> listGroupByCepFuncionarios = enderecoRepository.findGroupByCepFuncionarios();
 		if(listGroupByCepFuncionarios != null) {
-			retorno = buscarViaCep(listGroupByCepFuncionarios.get(0));
+			String cep = (String) listGroupByCepFuncionarios.get(0)[0];
+			retorno = buscarViaCep(cep);
 		}else {
 			retorno = new Endereco();
 		}
@@ -73,7 +74,7 @@ public class EnderecoService {
 			endereco = buscar(enderecoBase.getId());				
 		}else {
 			 isNovoEndereco = true;
-			 endereco = buscar(enderecoBase.getCep());
+			 endereco = buscarViaCep(enderecoBase.getCep());
 		}
 		
 		if(isUpdate || isNovoEndereco)

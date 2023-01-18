@@ -54,6 +54,7 @@ public class FuncionariosResource{
 												            value = "tamanho",
 												            required = false,
 												            defaultValue = "10") int tamanho) {
+    	
 		return ResponseEntity.status(HttpStatus.OK).body(funcionarioService.listar(pagina,tamanho));
 	}
 	
@@ -67,6 +68,7 @@ public class FuncionariosResource{
 	})
 	@GetMapping(value="/{id}",produces="application/json")
 	public ResponseEntity<Funcionario> buscar(@PathVariable("id") Long id) {
+    	
 		return ResponseEntity.status(HttpStatus.OK).body(funcionarioService.buscar(id));
 	}
     
@@ -79,6 +81,7 @@ public class FuncionariosResource{
 	})
 	@PostMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<?> salvar(@Valid @RequestBody Funcionario funcionario) {
+    	
 		funcionario = funcionarioService.salvar(funcionario,false);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 						.path("/{id}").buildAndExpand(funcionario.getId())
@@ -111,6 +114,7 @@ public class FuncionariosResource{
 	})
 	@DeleteMapping(value="/{id}")
 	public ResponseEntity<?> deletar(@PathVariable("id") Long id) {
+    	
 			funcionarioService.deletar(id);
 			return ResponseEntity.noContent().build();
 	}
@@ -122,6 +126,7 @@ public class FuncionariosResource{
 	})
 	@GetMapping(value="/cep-maior-incidencia", produces="application/json")
 	public ResponseEntity<Endereco> buscarCepMaiorIncidencia() {
+    	
 		return ResponseEntity.status(HttpStatus.OK).body(funcionarioService.buscarCepMaiorIncidencia());
 	}
 	
