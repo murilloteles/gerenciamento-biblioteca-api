@@ -12,6 +12,7 @@
 
 - `Java 8`
 - `Spring Boot`
+- `Spring Security` 
 - `Hibernate`
 - `PostgreSQL`
 - `JUnit`
@@ -19,3 +20,7 @@
 # Dependências do projeto
 
 - `Api ViaCEP`: Por meio de requisição GET para o endereço "https://viacep.com.br/ws/{cep}/json", utiliza-se essa funcionalidade para buscar dados de endereço de um CEP específico. 
+
+# Segurança da API
+
+- `Autenticação`: Para utilizar a API precisa se autenticar. O tipo utilizado é em memória pelo método Básico de autenticação do HTTP (Basic Auth). Usuário e senha podem ser definidos no arquivo `application.properties`.
