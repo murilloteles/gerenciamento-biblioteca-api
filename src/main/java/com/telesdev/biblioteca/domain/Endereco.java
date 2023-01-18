@@ -15,28 +15,38 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
+@ApiModel(value = "Endereco")
 public class Endereco {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonInclude(Include.NON_NULL)
+    @ApiModelProperty(value = "Preencher somente quando quiser utilizar um Endereço já salvo")
 	private Long id;
 	
 	@Pattern(regexp="^(([0-9]{8})|([0-9]{5}-[0-9]{3}))$",message="Cep com formato inválido. Formatos aceitos: 00000000 ou 00000-000 ")
     @NotEmpty(message = "O campo cep não pode ser vazio.")
+    @ApiModelProperty(value = "Preencher para um novo endereço, a partir desse campo é preenchido o restante.")
 	private String cep;
 	
 	@JsonInclude(Include.NON_NULL)
+    @ApiModelProperty(value = "Preencher esse campo caso queira mudar o padrão buscado pelo CEP.")
 	private String logradouro;
 	
 	@JsonInclude(Include.NON_NULL)
+    @ApiModelProperty(value = "Preencher esse campo caso queira mudar o padrão buscado pelo CEP.")
 	private String complemento;
 	
 	@JsonInclude(Include.NON_NULL)
+    @ApiModelProperty(value = "Preencher esse campo caso queira mudar o padrão buscado pelo CEP.")
 	private String bairro;
 	
 	@JsonInclude(Include.NON_NULL)
+    @ApiModelProperty(value = "Número da casa/Apartamento.")
 	private Long numero;
 	
 	private String localidade;

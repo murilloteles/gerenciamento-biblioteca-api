@@ -24,15 +24,28 @@ import com.telesdev.biblioteca.domain.Funcionario;
 import com.telesdev.biblioteca.domain.VariaveisGlobais;
 import com.telesdev.biblioteca.service.FuncionarioService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 
 @RestController
 @RequestMapping(VariaveisGlobais.URN_BASE + "/funcionarios")
+@Api(tags="Funcionarios Resource")
+@Tag(name = "Funcionarios Resource", description = "Resource com operações para gerenciar Funcionários")
 public class FuncionariosResource{
 	
 	@Autowired
 	FuncionarioService funcionarioService;
 	
-	@GetMapping
+    @ApiOperation(value = "Retorna Todos os Funcionários cadastrados")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 200, message = "Sucesso"),
+		    @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+	})
+	@GetMapping(produces="application/json")
 	public ResponseEntity<Page<Funcionario>> listar(@RequestParam(
 												            value = "pagina",
 												            required = false,
@@ -45,13 +58,27 @@ public class FuncionariosResource{
 	}
 	
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<?> buscar(@PathVariable("id") Long id) {
+    @ApiOperation(value = "Retorna o Funcionário com ID indicado")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 200, message = "Sucesso"),
+		    @ApiResponse(code = 400, message = "Requisição inválida"),
+		    @ApiResponse(code = 404, message = "Não Encontrado"),
+		    @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+	})
+	@GetMapping(value="/{id}",produces="application/json")
+	public ResponseEntity<Funcionario> buscar(@PathVariable("id") Long id) {
 		return ResponseEntity.status(HttpStatus.OK).body(funcionarioService.buscar(id));
 	}
-	
-	@PostMapping
-	public ResponseEntity<Void> salvar(@Valid @RequestBody Funcionario funcionario) {
+    
+    @ApiOperation(value = "Salva um Funcionário.")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 201, message = "Criado com sucesso. No Header Location terá a Url para busca-lo."),
+		    @ApiResponse(code = 400, message = "Requisição inválida"),
+		    @ApiResponse(code = 404, message = "Não Encontrado"),
+		    @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+	})
+	@PostMapping(produces="application/json", consumes="application/json")
+	public ResponseEntity<?> salvar(@Valid @RequestBody Funcionario funcionario) {
 		funcionario = funcionarioService.salvar(funcionario,false);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 						.path("/{id}").buildAndExpand(funcionario.getId())
@@ -59,8 +86,15 @@ public class FuncionariosResource{
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<Void> atualizar(@PathVariable("id") Long id,
+    @ApiOperation(value = "Atualiza dados do Funcionário com o ID específico.")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 204, message = "Sucesso"),
+		    @ApiResponse(code = 400, message = "Requisição inválida"),
+		    @ApiResponse(code = 404, message = "Não Encontrado"),
+		    @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+	})
+	@PutMapping(value="/{id}", produces="application/json", consumes="application/json")
+	public ResponseEntity<?> atualizar(@PathVariable("id") Long id,
 						   				  @Valid @RequestBody Funcionario funcionario) {
 		
 			funcionario.setId(id);
@@ -68,13 +102,25 @@ public class FuncionariosResource{
 			return ResponseEntity.noContent().build();
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deletar(@PathVariable("id") Long id) {
+    @ApiOperation(value = "Exclui o Funcionário com o ID específico.")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 204, message = "Sucesso"),
+		    @ApiResponse(code = 400, message = "Requisição inválida"),
+		    @ApiResponse(code = 404, message = "Não Encontrado"),
+		    @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+	})
+	@DeleteMapping(value="/{id}")
+	public ResponseEntity<?> deletar(@PathVariable("id") Long id) {
 			funcionarioService.deletar(id);
 			return ResponseEntity.noContent().build();
 	}
 	
-	@GetMapping("/cep-maior-incidencia")
+    @ApiOperation(value = "Busca o CEP com maior incidência nos endereços entre os Funcionarios.")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 200, message = "Sucesso"),
+		    @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+	})
+	@GetMapping(value="/cep-maior-incidencia", produces="application/json")
 	public ResponseEntity<Endereco> buscarCepMaiorIncidencia() {
 		return ResponseEntity.status(HttpStatus.OK).body(funcionarioService.buscarCepMaiorIncidencia());
 	}

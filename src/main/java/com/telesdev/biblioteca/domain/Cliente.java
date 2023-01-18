@@ -13,7 +13,10 @@ import javax.persistence.OneToOne;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.swagger.annotations.ApiModel;
+
 @Entity
+@ApiModel(value = "Cliente")
 public class Cliente extends Pessoa{
 	
 	@Id

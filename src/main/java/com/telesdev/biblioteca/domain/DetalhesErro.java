@@ -1,5 +1,8 @@
 package com.telesdev.biblioteca.domain;
 
+import io.swagger.annotations.ApiModel;
+
+@ApiModel(value = "DetalheErro")
 public class DetalhesErro {
 	private String titulo;
 	private int status;

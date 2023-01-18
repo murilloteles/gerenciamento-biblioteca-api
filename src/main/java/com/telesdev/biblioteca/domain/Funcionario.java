@@ -15,7 +15,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import io.swagger.annotations.ApiModel;
+
 @Entity
+@ApiModel(value = "Funcionario")
 public class Funcionario extends Pessoa{
 	
 	@Id
