@@ -52,6 +52,15 @@ public class FuncionarioService {
 		
 	}
 	
+	public Funcionario buscar(String nome) {
+		Optional<Funcionario> optionalFuncionario = funcionarioRepository.findByNomeIgnoreCase(nome);
+		
+		if(!optionalFuncionario.isPresent())
+			throw new FuncionarioNaoEncontradoException("O Funcionario: " + nome +" não foi encontrado");
+		
+		return optionalFuncionario.get();	
+	}
+	
 	public void deletar(Long id) {
 		try {
 			funcionarioRepository.deleteById(id);

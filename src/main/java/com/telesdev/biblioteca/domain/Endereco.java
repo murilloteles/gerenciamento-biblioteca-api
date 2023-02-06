@@ -1,6 +1,7 @@
 package com.telesdev.biblioteca.domain;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -113,6 +114,25 @@ public class Endereco {
 		this.numero = numero;
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(bairro, cep, complemento, id, localidade, logradouro, numero, pessoas, uf);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Endereco other = (Endereco) obj;
+		return Objects.equals(bairro, other.bairro) && Objects.equals(cep, other.cep)
+				&& Objects.equals(complemento, other.complemento) && Objects.equals(id, other.id)
+				&& Objects.equals(localidade, other.localidade) && Objects.equals(logradouro, other.logradouro)
+				&& Objects.equals(numero, other.numero) && Objects.equals(pessoas, other.pessoas)
+				&& Objects.equals(uf, other.uf);
+	}
 	@Override
 	public String toString() {
 		return "Endereco [cep=" + cep + ", logradouro=" + logradouro + ", complemento=" + complemento + ", bairro="

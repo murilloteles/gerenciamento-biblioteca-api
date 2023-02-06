@@ -72,6 +72,20 @@ public class FuncionariosResource{
 		return ResponseEntity.status(HttpStatus.OK).body(funcionarioService.buscar(id));
 	}
     
+    @ApiOperation(value = "Retorna o Funcionário com Nome indicado")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 200, message = "Sucesso"),
+		    @ApiResponse(code = 400, message = "Requisição inválida"),
+		    @ApiResponse(code = 404, message = "Não Encontrado"),
+		    @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+	})
+	@GetMapping(value="/buscar",produces="application/json")
+	public ResponseEntity<Funcionario> buscar(@RequestParam(value = "nome",
+									            required = true) String nome) {
+    	
+		return ResponseEntity.status(HttpStatus.OK).body(funcionarioService.buscar(nome));
+	}
+    
     @ApiOperation(value = "Salva um Funcionário.")
 	@ApiResponses(value = {
 		    @ApiResponse(code = 201, message = "Criado com sucesso. No Header Location terá a Url para busca-lo."),
